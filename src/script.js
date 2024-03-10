@@ -16,6 +16,8 @@ const cubeTextureLoader = new THREE.CubeTextureLoader();
  */
 // Debug
 const gui = new dat.GUI();
+// add an envMapIntensity property to Dat.GUI by using debugObject
+const debugObject = {};
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -36,7 +38,8 @@ const updateAllMaterials = () => {
       console.log(child, "child");
       // now we can use 'environmentMap' on the 'envMap' of material
       child.material.envMap = environmentMap;
-      child.material.envMapIntensity = 5;
+      // increase intensity of env map
+      child.material.envMapIntensity = debugObject.envMapIntensity;
     }
   });
 };
@@ -66,6 +69,16 @@ const environmentMap = cubeTextureLoader.load([
 // ### Apply enviroment map to the background ###
 // To apply the environmentMap on the scene we use background property
 scene.background = environmentMap;
+
+debugObject.envMapIntensity = 5;
+gui
+  .add(debugObject, "envMapIntensity")
+  .min(0)
+  .max(10)
+  .step(0.001)
+  .onChange(() => {
+    updateAllMaterials();
+  });
 
 /**
  * Models
