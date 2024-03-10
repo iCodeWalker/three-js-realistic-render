@@ -6,3 +6,5 @@
    The lighting will be taken care by the environment map.
    An environment map is like a photo of surrounding and it can be a 360 photo or 6 photos that compose a cube.
    We will use environment map both for the background and to illuminate our model.
+
+3. We can apply the environment map to the materials with 'envMap' and we need to traverse the object to update each material. Create a updateAllMaterials and traverse the whole 'scene.

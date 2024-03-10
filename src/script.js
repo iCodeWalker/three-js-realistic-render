@@ -12,26 +12,6 @@ const gltfLoader = new GLTFLoader();
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 /**
- * Models
- */
-// Load the model
-gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
-  console.log("success");
-  gltf.scene.scale.set(10, 10, 10);
-  gltf.scene.position.set(0, -4, 0);
-  gltf.scene.rotation.y = Math.PI * 0.5;
-  scene.add(gltf.scene);
-
-  // add to gui
-  gui
-    .add(gltf.scene.rotation, "y")
-    .min(-Math.PI)
-    .max(Math.PI)
-    .step(0.001)
-    .name("rotation");
-});
-
-/**
  * Base
  */
 // Debug
@@ -42,6 +22,24 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+
+/**
+ * update all materials
+ */
+const updateAllMaterials = () => {
+  // use instanceof to target the THREE.Mesh using THREE.MeshStandardMaterial
+  scene.traverse((child) => {
+    if (
+      child instanceof THREE.Mesh &&
+      child.material instanceof THREE.MeshStandardMaterial
+    ) {
+      console.log(child, "child");
+      // now we can use 'environmentMap' on the 'envMap' of material
+      child.material.envMap = environmentMap;
+      child.material.envMapIntensity = 5;
+    }
+  });
+};
 
 // /**
 //  * Test sphere
@@ -68,6 +66,28 @@ const environmentMap = cubeTextureLoader.load([
 // ### Apply enviroment map to the background ###
 // To apply the environmentMap on the scene we use background property
 scene.background = environmentMap;
+
+/**
+ * Models
+ */
+// Load the model
+gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+  console.log("success");
+  gltf.scene.scale.set(10, 10, 10);
+  gltf.scene.position.set(0, -4, 0);
+  gltf.scene.rotation.y = Math.PI * 0.5;
+  scene.add(gltf.scene);
+
+  // add to gui
+  gui
+    .add(gltf.scene.rotation, "y")
+    .min(-Math.PI)
+    .max(Math.PI)
+    .step(0.001)
+    .name("rotation");
+
+  updateAllMaterials();
+});
 
 /**
  * Lights
