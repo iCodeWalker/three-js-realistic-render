@@ -8,6 +8,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
  */
 
 const gltfLoader = new GLTFLoader();
+// cube texture loader
+const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 /**
  * Models
@@ -41,14 +43,31 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
+// /**
+//  * Test sphere
+//  */
+// const testSphere = new THREE.Mesh(
+//   new THREE.SphereGeometry(1, 32, 32),
+//   new THREE.MeshStandardMaterial()
+// );
+// scene.add(testSphere);
+
+// Loading textures after creating a scene
 /**
- * Test sphere
+ * Environment Maps
  */
-const testSphere = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 32),
-  new THREE.MeshStandardMaterial()
-);
-scene.add(testSphere);
+const environmentMap = cubeTextureLoader.load([
+  "/textures/environmentMaps/0/px.jpg",
+  "/textures/environmentMaps/0/nx.jpg",
+  "/textures/environmentMaps/0/py.jpg",
+  "/textures/environmentMaps/0/ny.jpg",
+  "/textures/environmentMaps/0/pz.jpg",
+  "/textures/environmentMaps/0/nz.jpg",
+]);
+
+// ### Apply enviroment map to the background ###
+// To apply the environmentMap on the scene we use background property
+scene.background = environmentMap;
 
 /**
  * Lights
