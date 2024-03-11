@@ -13,3 +13,42 @@
 
 scene.environment = environmentMap
 But still we need to apply the envMapIntensity on each material
+
+5. The 'outputEncoding' property controls the output render encoding.
+   The default 'outputEncoding' is THREE.LinearEncoding and we should use THREE.sRGBEncoding
+
+renderer.outputEncoding = THREE.sRGBEncoding
+
+THREE.GammaEncoding : the gamma encoding is a way of storing colors while optimizing how bright and dark values are stored according to human eye sensitivity.
+
+When we use the sRGBEncoding, it's like using the GammaEncoding with a default gamma factor of 2.2
+
+6. Tone Mapping
+
+   1. Tone mapping is to convert High Dynamic Range (HDR) values to Low Dynamic Range (LDR) values.
+   2. We can see lights of image where the color values can go beyond 1.
+
+   We can change the toneMapping property on the WebGLRenderer with the following values.
+
+   1. THREE.NoToneMapping(default).
+   2. THREE.LinearToneMapping.
+   3. THREE.ReinhardToneMapping.
+   4. THREE.CineonToneMapping.
+   5. THREE.ACESFilmicToneMapping
+
+   We can also change the tone mapping exposure. The amount of light the algorithm let.
+   renderer.toneMappingExposure = 3
+
+7. Antialiasing
+   Aliasing appears like a stair-like effect on the edges of the geometies when we zoom it.
+   This is due to the renderer having to choose if the geometry is in pixel or not.
+
+   One easy solution is to increase our render's resolution to the double in which 1 pixel color will automatically be divided into 4 px rendered. This is called super sampling (SSAA) or fullscreen sampling (FSAA), it's easy and efficient but not performant.
+
+   Another solution named multi sampling (MSAA) also render multiple values per pixel (usually 4) like for super sampling but only on the geometry edges.
+
+8. Shadows
+   To activate the shadow on WebGLRenderer and change the shadow type to THREE.PCFSoftShadowMap
+
+   renderer.shadowMap.enabled = true;
+   renderer.shadowMap.type = THREE.PCFSoftShadowMap;

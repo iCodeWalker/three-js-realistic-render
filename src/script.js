@@ -40,6 +40,9 @@ const updateAllMaterials = () => {
       child.material.envMap = environmentMap;
       // increase intensity of env map
       child.material.envMapIntensity = debugObject.envMapIntensity;
+      // activate the shadow on all Meshes
+      child.castShadow = true;
+      child.receiveShadow = true;
     }
   });
 };
@@ -72,6 +75,9 @@ scene.background = environmentMap;
 
 // There is an easier way of applying the environment map to all objects with the 'environment' property on the scene
 scene.environment = environmentMap;
+
+// change environmentMap encoding to THREE.sRGBEncoding
+// environmentMap.encoding = THREE.sRGBEncoding  // This is also handled by THREE.GLTFLoader()
 
 debugObject.envMapIntensity = 5;
 gui
@@ -111,6 +117,12 @@ gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
 
 const directionalLight = new THREE.DirectionalLight("#ffffff", 1);
 directionalLight.position.set(0.25, 3, -2.25);
+// Activate the shadow on directional light
+directionalLight.castShadow = true;
+// Reduce the far value of the light
+directionalLight.shadow.camera.far = 15;
+// increase the shadow map size to 1024x1024
+directionalLight.shadow.mapSize.set(1024, 1024);
 scene.add(directionalLight);
 
 /**
@@ -186,9 +198,30 @@ controls.enableDamping = true;
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  antialias: true, // Three.js handles aliasing automatically, just we have to initialize it.
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+// renderer.outputEncoding = THREE.sRGBEncoding; // Not required to handle as THREE.GLTFLoader() does it automatically
+renderer.toneMapping = THREE.ReinhardToneMapping;
+
+renderer.toneMappingExposure = 3;
+
+// To activate the shadow on WebGLRenderer and change the shadow type to THREE.PCFSoftShadowMap
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// Add to "toneMapping" Dat.GUI
+gui.add(renderer, "toneMapping", {
+  No: THREE.NoToneMapping,
+  Linear: THREE.LinearToneMapping,
+  Reinhard: THREE.ReinhardToneMapping,
+  Cineon: THREE.CineonToneMapping,
+  ACESFilmic: THREE.ACESFilmicToneMapping,
+});
+
+// Add to "toneMappingExposure" Dat.GUI
+gui.add(renderer, "toneMappingExposure").min(0).max(10).step(0.001);
 
 /**
  * Animate
