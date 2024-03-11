@@ -8,3 +8,8 @@
    We will use environment map both for the background and to illuminate our model.
 
 3. We can apply the environment map to the materials with 'envMap' and we need to traverse the object to update each material. Create a updateAllMaterials and traverse the whole 'scene.
+
+4. There is an easier way of applying the environment map to all objects with the 'environment' property on the scene
+
+scene.environment = environmentMap
+But still we need to apply the envMapIntensity on each material

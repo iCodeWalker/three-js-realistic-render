@@ -70,6 +70,9 @@ const environmentMap = cubeTextureLoader.load([
 // To apply the environmentMap on the scene we use background property
 scene.background = environmentMap;
 
+// There is an easier way of applying the environment map to all objects with the 'environment' property on the scene
+scene.environment = environmentMap;
+
 debugObject.envMapIntensity = 5;
 gui
   .add(debugObject, "envMapIntensity")
