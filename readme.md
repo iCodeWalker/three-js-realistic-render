@@ -52,3 +52,17 @@ When we use the sRGBEncoding, it's like using the GammaEncoding with a default g
 
    renderer.shadowMap.enabled = true;
    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+9. Shadow Acne
+   We see lines on the surface of the textures and this is called Shadow acne, and occur on both smooth and flat surfaces for precision reasons when calculating if the surface is in shadow or not.
+
+   The hamburger is casting a shadow on it's own surface.
+
+   We can use shadow's 'bias' and 'normalBias' to fix this.
+
+   1. The 'bias' usually helps for flat surfaces.
+   2. The 'normalBias' usually helps for rounded surfaces, which is in burger case. We have to increase it until the shadow acne is barely visible.
+
+   For solving shadow acne we move the surface more inside the real texture along the normal, so our shadow is inside the surface that we saw.
+
+   directionalLight.shadow.normalBias = 0.05;

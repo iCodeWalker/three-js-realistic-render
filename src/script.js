@@ -93,10 +93,10 @@ gui
  * Models
  */
 // Load the model
-gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+gltfLoader.load("/models/hamburger.glb", (gltf) => {
   console.log("success");
-  gltf.scene.scale.set(10, 10, 10);
-  gltf.scene.position.set(0, -4, 0);
+  gltf.scene.scale.set(0.3, 0.3, 0.3);
+  gltf.scene.position.set(0, -1, 0);
   gltf.scene.rotation.y = Math.PI * 0.5;
   scene.add(gltf.scene);
 
@@ -123,6 +123,9 @@ directionalLight.castShadow = true;
 directionalLight.shadow.camera.far = 15;
 // increase the shadow map size to 1024x1024
 directionalLight.shadow.mapSize.set(1024, 1024);
+// remove shadow acne from the surface
+directionalLight.shadow.normalBias = 0.05;
+
 scene.add(directionalLight);
 
 /**
